@@ -1,0 +1,4 @@
+.env
+link.db
+*.iml
+/.idea/*
