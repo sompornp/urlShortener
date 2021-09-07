@@ -58,7 +58,7 @@ func main() {
 
 	r := mux.NewRouter()
 
-	(&handler.PinHandler{}).ConfigRoute(r)
+	(&handler.PingHandler{}).ConfigRoute(r)
 
 	(&handler.AdminHandler{
 		DB:         db,

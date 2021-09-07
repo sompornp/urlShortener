@@ -6,14 +6,14 @@ import (
 	"net/http"
 )
 
-type PinHandler struct {
+type PingHandler struct {
 }
 
-func (h *PinHandler) ConfigRoute(r *mux.Router) {
+func (h *PingHandler) ConfigRoute(r *mux.Router) {
 	r.HandleFunc("/ping", h.Handler)
 }
 
-func (h *PinHandler) Handler(w http.ResponseWriter, r *http.Request) {
+func (h *PingHandler) Handler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "pong")
 }
