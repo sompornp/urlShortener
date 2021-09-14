@@ -93,7 +93,6 @@ func (h *ShortenedHandler) Encode(w http.ResponseWriter, r *http.Request) {
 
 	for len(h.DB.FindShortLink(&db.DBCriteria{Id: id})) > 0 {
 		id, _ = gonanoid.New(6)
-		time.Sleep(10 * time.Millisecond)
 	}
 
 	shortUrl := url.URL{
