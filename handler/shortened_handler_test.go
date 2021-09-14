@@ -27,10 +27,6 @@ func TestShortLinkEncodeHandler(t *testing.T) {
 	}
 	defer mockDb.Close()
 
-	mock.ExpectQuery("SELECT (.+) FROM shortLink where 1 = 1 and id = (.+)").
-		WithArgs(sqlmock.AnyArg()).
-		WillReturnRows(sqlmock.NewRows([]string{"id", "shortUrl", "targetUrl", "cnt", "expire"}))
-
 	mock.ExpectPrepare("INSERT INTO shortlink").
 		ExpectExec().
 		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg()).

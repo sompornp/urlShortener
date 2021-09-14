@@ -89,31 +89,31 @@ func (h *ShortenedHandler) Encode(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	id, _ := gonanoid.New(6)
+	for true {
+		id, _ := gonanoid.New(6)
+		shortUrl := url.URL{
+			Scheme: h.RefererUrl.Scheme,
+			Host:   h.RefererUrl.Host,
+			Path:   id}
 
-	for len(h.DB.FindShortLink(&db.DBCriteria{Id: id})) > 0 {
-		id, _ = gonanoid.New(6)
+		err := h.DB.InsertShortLink(model.ShortLink{
+			Id:        id,
+			ShortUrl:  shortUrl.String(),
+			TargetUrl: targetUrl.String(),
+			Cnt:       0,
+			Expire:    input.Expire,
+		})
+
+		if err == nil {
+			response, _ := json.Marshal(EncodeResponse{
+				Success: true,
+				Url:     shortUrl.String(),
+			})
+
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusOK)
+			w.Write(response)
+			return
+		}
 	}
-
-	shortUrl := url.URL{
-		Scheme: h.RefererUrl.Scheme,
-		Host:   h.RefererUrl.Host,
-		Path:   id}
-
-	h.DB.InsertShortLink(model.ShortLink{
-		Id:        id,
-		ShortUrl:  shortUrl.String(),
-		TargetUrl: targetUrl.String(),
-		Cnt:       0,
-		Expire:    input.Expire,
-	})
-
-	response, _ := json.Marshal(EncodeResponse{
-		Success: true,
-		Url:     shortUrl.String(),
-	})
-
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
-	w.Write(response)
 }

@@ -54,16 +54,14 @@ func createTableIfNotExist(db *sql.DB) {
 	statement.Exec()
 }
 
-func (d *DB) InsertShortLink(link model.ShortLink) {
+func (d *DB) InsertShortLink(link model.ShortLink) error {
 	insertSQL := `INSERT INTO shortlink(id, shortUrl, targetUrl, cnt, expire) VALUES (?, ?, ?, ?, ?)`
 	statement, err := d.DB.Prepare(insertSQL)
 	if err != nil {
 		log.Fatalln(err.Error())
 	}
 	_, err = statement.Exec(link.Id, link.ShortUrl, link.TargetUrl, link.Cnt, link.Expire)
-	if err != nil {
-		log.Fatalln(err.Error())
-	}
+	return err
 }
 
 func (d *DB) UpdateShortLink(id string) {
